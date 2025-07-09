@@ -1,27 +1,23 @@
 /*
  * ===================================================================
- *  ACCESSIBILITY STYLESHEET - FINAL VERSION v2.2.0
+ *  ACCESSIBILITY STYLESHEET - v3.0 FINAL
  * ===================================================================
- *  - FIX: Adds max-height and scrolling for the dropdown menu to prevent
- *    it from going off-screen when page is zoomed.
- *  - Positions widget on bottom-left of the WINDOW.
- *  - Menu pops up above the button with animation.
- *  - Fixes the invert/saturate color issue permanently.
- *  - Fully responsive.
+ *  - FIX: Adds robust max-height and scrolling for the dropdown menu.
+ *  - All positioning and features are stable.
  */
 
-/* Main widget container - The new floating button holder */
+/* Main widget container - The floating button holder */
 .accessibility-widget {
-    position: fixed; /* Fixes the button to the window/viewport */
+    position: fixed;
     bottom: 20px;
     left: 20px;
-    z-index: 999998; /* High z-index, but below the menu */
+    z-index: 999998;
 }
 
 /* The accessibility dropdown menu itself */
 .accessibility-widget .accessibility-menu {
-    position: absolute; /* Positioned relative to the .accessibility-widget parent */
-    bottom: calc(100% + 15px); /* Pops up ABOVE the button with 15px spacing */
+    position: absolute;
+    bottom: calc(100% + 15px);
     left: 0;
     min-width: 260px;
     padding: 15px 20px;
@@ -30,64 +26,51 @@
     background: #40c4ec !important;
     color: #fff !important;
     border-radius: 8px;
-    border: none;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-    
-    /* ===== NEW FIX FOR OVERFLOW/SCROLLING ===== */
+
+    /* ===== FINAL FIX FOR OVERFLOW/SCROLLING ===== */
     max-height: calc(100vh - 100px); /* Never be taller than the viewport minus some margin */
     overflow-y: auto; /* Add a scrollbar if content is too tall */
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
     /* ========================================== */
     
-    /* FOR SMOOTH POP-UP ANIMATION */
+    /* Animation */
     opacity: 0;
-    transform: translateY(10px); /* Start slightly down */
+    transform: translateY(10px);
     visibility: hidden;
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
 }
 
-/* Custom scrollbar styling for the menu */
-.accessibility-widget .accessibility-menu::-webkit-scrollbar {
-    width: 6px;
-}
-.accessibility-widget .accessibility-menu::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-}
-.accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-}
-.accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.8);
-}
+/* Custom scrollbar for the menu */
+.accessibility-widget .accessibility-menu::-webkit-scrollbar { width: 8px; }
+.accessibility-widget .accessibility-menu::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+.accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.6); border-radius: 4px; }
+.accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb:hover { background: #fff; }
 
-
-/* This class, toggled by JS, makes the menu appear */
+/* Makes the menu appear */
 .accessibility-widget .accessibility-menu.show {
     opacity: 1;
-    transform: translateY(0); /* Move to its final position */
+    transform: translateY(0);
     visibility: visible;
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .accessibility-widget .accessibility-menu strong { color: #fff !important; }
-.accessibility-widget .accessibility-menu .menu-divider { border-top: 1px solid #fff; margin: 10px 0; height: 1px; overflow: hidden; }
+.accessibility-widget .accessibility-menu .menu-divider { border-top: 1px solid rgba(255,255,255,0.3); margin: 10px 0; }
 
-/* The circular toggle button styling */
-.accessibility-widget .accessibility-toggle { padding: 10px !important; border: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #007bff !important; border-radius: 50% !important; width: 50px !important; height: 50px !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease !important; cursor: pointer !important; z-index: 999998 !important; position: relative !important; }
-.accessibility-widget .accessibility-toggle:hover { background: #0056b3 !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+/* Circular toggle button styling */
+.accessibility-widget .accessibility-toggle { padding: 10px !important; border: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #007bff !important; border-radius: 50% !important; width: 50px !important; height: 50px !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease !important; cursor: pointer !important; position: relative !important; }
+.accessibility-widget .accessibility-toggle:hover { background: #0056b3 !important; }
 .accessibility-widget .accessibility-toggle img { width: 24px !important; height: 24px !important; filter: brightness(0) invert(1) !important; object-fit: contain !important; }
 
 /* Menu item and button styling */
-.accessibility-widget .menu-item { margin: 0; padding: 0; list-style: none; }
-.accessibility-widget .ac-btn { display: flex; align-items: center; width: 100%; background: transparent; border: none; color: #fff; font-size: 15px; padding: 7px 0; margin: 0; text-align: left; transition: background 0.2s, color 0.2s; border-radius: 4px; position: relative; cursor: pointer; }
-.accessibility-widget .ac-btn img { margin-right: 10px; font-size: 16px; min-width: 18px; text-align: center; filter: invert(1); }
-.accessibility-widget .ac-btn:hover, .accessibility-widget .ac-btn:focus { background: #0ea7c7; color: #fff; outline: none; }
-.accessibility-widget .ac-btn.active { background: #0ea7c7; }
+.accessibility-widget .ac-btn { display: flex; align-items: center; width: 100%; background: transparent; border: none; color: #fff; font-size: 15px; padding: 8px 5px; margin: 2px 0; text-align: left; transition: background 0.2s ease; border-radius: 4px; position: relative; cursor: pointer; }
+.accessibility-widget .ac-btn img { margin-right: 12px; min-width: 18px; filter: invert(1); }
+.accessibility-widget .ac-btn:hover, .accessibility-widget .ac-btn:focus { background: #0ea7c7; outline: none; }
+.accessibility-widget .ac-btn.active { background: #0ea7c7; font-weight: bold; }
 
-/* Status indicators (checkmark, level number) */
+/* Status indicators */
 .accessibility-widget .level-indicator, .accessibility-widget .status-indicator { position: absolute; top: 50%; right: 5px; transform: translateY(-50%); background: #ffb300; color: #222; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: bold; display: none; align-items: center; justify-content: center; }
 .accessibility-widget .status-indicator { background: #28a745; color: #fff; width: 16px; height: 16px; }
 .accessibility-widget .ac-btn.active .level-indicator, .accessibility-widget .ac-btn.active .status-indicator { display: flex; }
@@ -95,11 +78,9 @@
 
 /*
  * ===================================================================
- *  CRITICAL FIX FOR INVERT/SATURATE ISSUE (DO NOT CHANGE)
+ *  CRITICAL FIX FOR INVERT/SATURATE ISSUE
  * ===================================================================
  */
-body.invert-colors {}
-body.saturate-colors {}
 body.invert-colors > *:not(.accessibility-widget) { filter: invert(1) hue-rotate(180deg) !important; }
 body.saturate-colors > *:not(.accessibility-widget) { filter: saturate(3) !important; }
 body.invert-colors .accessibility-widget,
@@ -110,7 +91,6 @@ body.saturate-colors .accessibility-widget img { filter: none !important; }
 /* Other accessibility effects */
 body.high-contrast { background: #000 !important; color: #fff !important; }
 body.high-contrast a { color: #00ffff !important; text-decoration: underline !important; }
-body.high-contrast button { background: #333 !important; color: #fff !important; border: 1px solid #fff !important; }
 body.highlight-links a { background: yellow !important; color: #222 !important; text-decoration: underline !important; }
 body.text-spacing { letter-spacing: 0.15em !important; }
 body.line-height { line-height: 2.2 !important; }
@@ -120,29 +100,13 @@ body.hide-images .accessibility-widget .accessibility-toggle img { visibility: v
 /* Organized sections in the dropdown */
 .accessibility-widget .section-group { margin-bottom: 8px; }
 .accessibility-widget .section-group:last-child { margin-bottom: 0; }
-.accessibility-widget .section-group strong { display: flex !important; align-items: center !important; font-size: 14px !important; margin: 8px 0 6px 0 !important; padding: 4px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; color: #fff !important; }
-.accessibility-widget .section-group strong img { margin-right: 8px !important; flex-shrink: 0 !important; filter: invert(1); }
+.accessibility-widget .section-group strong { display: flex !important; align-items: center !important; font-size: 14px !important; margin: 8px 0 6px 0 !important; padding: 4px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; }
+.accessibility-widget .section-group strong img { margin-right: 8px !important; filter: invert(1); }
 .accessibility-widget .category-controls { display: flex !important; flex-direction: column !important; gap: 2px !important; }
 
-/*
- * ===================================================================
- *  MOBILE RESPONSIVE STYLES
- * ===================================================================
- */
+/* MOBILE RESPONSIVE STYLES */
 @media (max-width: 768px) {
-    .accessibility-widget {
-        bottom: 15px;
-        left: 15px;
-    }
-    .accessibility-widget .accessibility-menu {
-        position: absolute;
-        bottom: calc(100% + 10px);
-        left: 0;
-        width: calc(100vw - 30px);
-        max-width: 320px;
-        transform-origin: bottom left;
-        top: auto !important;
-        right: auto !important;
-    }
-    .accessibility-widget .ac-btn { font-size: 16px !important; padding: 14px 8px !important; min-height: 48px !important; }
+    .accessibility-widget { bottom: 15px; left: 15px; }
+    .accessibility-widget .accessibility-menu { width: calc(100vw - 30px); max-width: 320px; }
+    .accessibility-widget .ac-btn { min-height: 48px !important; }
 }
