@@ -1,11 +1,15 @@
 /**
  * Universal Accessibility Controls Module - JavaScript Core
- * v4.0 FINAL - Keyboard Navigation & Compact UI
+ * v4.3 FINAL - Intelligent, Self-Contained Navigation Detection
  */
 
 // Global state variables
 var dropdownInitialized = false; var dropdownJustOpened = false; var fontIncreaseLevel = 0, fontDecreaseLevel = 0, maxLevels = 3; var screenReaderActive = false; var speechSynthesis = window.speechSynthesis; var currentUtterance = null;
-var navLinks = []; var currentNavLinkIndex = -1;
+var navLinks = [
+    'http://localhost:8000/about-pcacs.php',
+
+]; 
+var currentNavLinkIndex = -1;
 
 // --- DEVELOPER CONFIGURATION ---
 var SKIP_ACCESSIBILITY_MENU = true;
@@ -73,7 +77,7 @@ function createToast() {
     var toastOverlay = document.createElement('div');
     toastOverlay.id = 'keyboard-info-toast-overlay';
     toastOverlay.onclick = closeKeyboardInfoToast;
-    var toastContent = `
+    toastOverlay.innerHTML = `
         <div id="keyboard-info-toast" onclick="event.stopPropagation();">
             <button id="keyboard-info-toast-close" onclick="closeKeyboardInfoToast()">×</button>
             <h3>Keyboard Navigation Guide</h3>
@@ -84,12 +88,11 @@ function createToast() {
                 <li><code>Alt + R</code> <span>Toggle Screen Reader</span></li>
                 <li><code>Alt + P</code> <span>Read Entire Page Aloud</span></li>
                 <li><code>M</code> <span>Scroll to Top</span></li>
-                <li><code>J / K</code> <span>Scroll Down / Up</span></li>
+                <li><code>J / K</code> <span>Scroll Down / Up (Smooth)</span></li>
                 <li><code>H</code> <span>Cycle through Main Navigation Links</span></li>
             </ul>
         </div>
     `;
-    toastOverlay.innerHTML = toastContent;
     document.body.appendChild(toastOverlay);
 }
 function reorganizeDropdownStructure() {
@@ -105,41 +108,84 @@ function reorganizeDropdownStructure() {
         <button class="ac-btn" onclick="resetAllSettings()" title="Reset All Settings" style="background:#dc3545;justify-content:center;font-weight:bold"><img src="https://img.icons8.com/ios-filled/16/recurring-appointment.png" alt="Reset">Reset All Settings</button>
     `;
 }
+
+// ===== NEW: INTELLIGENT NAVIGATION FINDER =====
+function findMainNavigationLinks() {
+    const allNavs = document.querySelectorAll('nav');
+
+    if (allNavs.length === 0) {
+        // Fallback if no <nav> tags exist: find links in the <header>
+        return document.querySelectorAll('header a[href]');
+    }
+
+    if (allNavs.length === 1) {
+        // If there's only one <nav>, it's almost certainly the main one.
+        return allNavs[0].querySelectorAll('a[href]');
+    }
+
+    // If multiple <nav> tags exist, use a scoring system to find the best one.
+    let candidates = Array.from(allNavs).map(nav => {
+        let score = 0;
+        const links = nav.querySelectorAll('a[href]');
+        
+        // Rule 1: Disqualify tiny or massive navs (like breadcrumbs or sitemaps)
+        if (links.length < 3 || links.length > 25) return { element: nav, score: -1 };
+
+        // Rule 2: Big bonus for being in the <header>
+        if (nav.closest('header')) score += 10;
+
+        // Rule 3: Bonus for NOT being in the <footer>
+        if (!nav.closest('footer')) score += 5;
+
+        // Rule 4: Bonus for having common navigation keywords in ID or class
+        const idAndClasses = (nav.id + ' ' + nav.className).toLowerCase();
+        if (/main|primary|top|header|menu/.test(idAndClasses)) score += 10;
+
+        return { element: nav, score: score };
+    });
+
+    // Sort candidates by score, highest first
+    const sortedCandidates = candidates.filter(c => c.score > 0).sort((a, b) => b.score - a.score);
+
+    if (sortedCandidates.length > 0) {
+        // Return links from the highest-scoring candidate
+        return sortedCandidates[0].element.querySelectorAll('a[href]');
+    }
+
+    // Final fallback if scoring fails
+    return document.querySelectorAll('header a[href]');
+}
+
+
 function setupKeyboardListeners() {
-    // This function finds navigation links once for the 'h' key.
-    // It looks for common navigation containers. Adapt the selector for your specific site if needed.
-    navLinks = document.querySelectorAll('nav a, header a[href]');
+    // This finds navigation links using the intelligent algorithm.
+    navLinks = findMainNavigationLinks();
 
     document.addEventListener('keydown', (event) => {
-        // IMPORTANT: Do not trigger shortcuts if user is typing in a form.
         const activeEl = document.activeElement;
-        if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable)) {
-            return;
-        }
+        if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable)) return;
 
         const key = event.key.toLowerCase();
 
-        // Handle Alt + Key shortcuts for toggles
         if (event.altKey) {
             event.preventDefault();
             switch (key) {
                 case 'c': toggleHighContrast(); break;
                 case 'i': toggleInvert(); break;
-                case 'h': toggleHighlightLinks(); break; // 'h' for highlight
-                case 'r': toggleScreenReader(); break;   // 'r' for reader
-                case 'p': readEntirePage(); break;       // 'p' for page
+                case 'h': toggleHighlightLinks(); break;
+                case 'r': toggleScreenReader(); break;
+                case 'p': readEntirePage(); break;
             }
         } else {
-            // Handle single-key shortcuts for navigation
             switch (key) {
                 case 'm': window.scrollTo({ top: 0, behavior: 'smooth' }); break;
-                case 'j': window.scrollBy(0, 100); break; // Scroll down
-                case 'k': window.scrollBy(0, -100); break; // Scroll up
+                case 'j': window.scrollBy({ top: 100, left: 0, behavior: 'smooth' }); break;
+                case 'k': window.scrollBy({ top: -100, left: 0, behavior: 'smooth' }); break;
                 case 'h':
                     if (navLinks.length > 0) {
+                        event.preventDefault();
                         currentNavLinkIndex = (currentNavLinkIndex + 1) % navLinks.length;
                         navLinks[currentNavLinkIndex].focus();
-                        event.preventDefault();
                     }
                     break;
             }
@@ -152,9 +198,9 @@ document.addEventListener('DOMContentLoaded', function() {
     var widget = document.querySelector('.accessibility-widget');
     if (widget) { document.body.appendChild(widget); }
     reorganizeDropdownStructure();
-    createToast(); // Create the toast HTML and append it
+    createToast();
     initializeAccessibilityDropdown();
-    setupKeyboardListeners(); // Activate all keyboard shortcuts
+    setupKeyboardListeners();
     try {
         loadSettings();
         loadSpeechSettings();
