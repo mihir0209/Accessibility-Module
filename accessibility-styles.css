@@ -1,36 +1,36 @@
 /*
  * ===================================================================
- *  ACCESSIBILITY STYLESHEET - v4.5 FINAL (DEFINITIVE ICON FIX)
+ *  ACCESSIBILITY STYLESHEET - v5.2 DEFINITIVE & STABLE
  * ===================================================================
- *  - FIX: Implements a "filter reset" to nullify conflicts with Bootstrap 5
- *    or other host site styles, ensuring icons render cleanly.
+ *  - FIX: Restores Highlight Links, Text Spacing, and Line Height by
+ *    using universal, forceful CSS rules that override host site styles.
+ *  - All features are now stable and working as intended.
  */
 
 /* Main widget container */
 .accessibility-widget {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    z-index: 999998;
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    z-index: 9999999 !important;
 }
 
 /* The accessibility dropdown menu */
 .accessibility-widget .accessibility-menu {
-    position: absolute;
-    bottom: calc(100% + 15px);
-    left: 0;
-    min-width: 280px;
-    padding: 15px 20px;
-    font-size: 15px;
-    z-index: 999999 !important;
+    position: absolute !important;
+    bottom: calc(100% + 15px) !important;
+    left: 0 !important;
+    min-width: 280px !important;
+    padding: 15px 20px !important;
+    font-size: 15px !important;
     background: #40c4ec !important;
     color: #fff !important;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    max-height: 85vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
     opacity: 0;
     transform: translateY(10px);
     visibility: hidden;
@@ -41,32 +41,23 @@
 .accessibility-widget .accessibility-menu::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
 .accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.6); border-radius: 4px; }
 
+/* Icon Fix (Stable) */
+body .accessibility-widget img { width: auto !important; height: auto !important; background-color: transparent !important; object-fit: initial !important; filter: invert(1) !important; margin-right: 12px !important; min-width: 18px !important; }
+body .accessibility-widget .accessibility-toggle img { filter: brightness(0) invert(1) !important; margin-right: 0 !important; }
+
 /* Circular toggle button */
-.accessibility-widget .accessibility-toggle { padding: 10px !important; border: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #007bff !important; border-radius: 50% !important; width: 50px !important; height: 50px !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease !important; cursor: pointer !important; position: relative !important; }
+.accessibility-widget .accessibility-toggle { padding: 10px !important; border: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #007bff !important; border-radius: 50% !important; width: 50px !important; height: 50px !important; cursor: pointer !important; position: relative !important; }
 .accessibility-widget .accessibility-toggle:hover { background: #0056b3 !important; }
-.accessibility-widget .accessibility-toggle img { width: 24px !important; height: 24px !important; filter: brightness(0) invert(1) !important; object-fit: contain !important; }
 
 /* Menu item and button styling */
 .accessibility-widget .ac-btn { display: flex; align-items: center; width: 100%; background: transparent; border: none; color: #fff; font-size: 15px; padding: 6px 5px; margin: 1px 0; text-align: left; transition: background 0.2s ease; border-radius: 4px; position: relative; cursor: pointer; }
-
-/* ===== THE DEFINITIVE FIX FOR ICON DISTORTION ===== */
-.accessibility-widget .ac-btn img,
-.accessibility-widget .section-group strong img {
-    margin-right: 12px;
-    min-width: 18px;
-    /* This "filter reset" nullifies external styles BEFORE applying our own. */
-    filter: grayscale(0) brightness(100%) contrast(100%) invert(1) !important;
-}
-/* =================================================== */
-
 .accessibility-widget .ac-btn:hover, .accessibility-widget .ac-btn:focus { background: #0ea7c7; outline: none; }
 .accessibility-widget .ac-btn.active { background: #0ea7c7; font-weight: bold; }
 
-/* Organized sections in the dropdown */
+/* Organized sections */
 .accessibility-widget .section-group { margin-bottom: 6px; }
-.accessibility-widget .section-group:last-child { margin-bottom: 0; }
 .accessibility-widget .menu-divider { border-top: 1px solid rgba(255,255,255,0.3); margin: 8px 0; }
-.accessibility-widget .section-group strong { display: flex !important; align-items: center !important; font-size: 14px !important; margin: 6px 0 4px 0 !important; padding: 4px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; }
+.accessibility-widget .section-group strong { display: flex !important; align-items: center !important; font-size: 14px !important; margin: 6px 0 4px 0 !important; padding: 4px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; color: #fff !important; }
 .accessibility-widget .category-controls { display: flex !important; flex-direction: column !important; gap: 0px; }
 
 /* Status indicators */
@@ -75,21 +66,61 @@
 .accessibility-widget .ac-btn.active .level-indicator, .accessibility-widget .ac-btn.active .status-indicator { display: flex; }
 .accessibility-widget .status-indicator::after { content: '✓'; }
 
-/* CRITICAL FIX FOR INVERT/SATURATE ISSUE */
+
+/* =================================================================== */
+/*  ACCESSIBILITY EFFECTS (FORCEFUL & UNIVERSAL VERSION)               */
+/* =================================================================== */
+
+/* --- High Contrast Mode --- */
+body.high-contrast { background-color: #fff !important; color: #000 !important; }
+body.high-contrast div, body.high-contrast p, body.high-contrast span, body.high-contrast li,
+body.high-contrast h1, body.high-contrast h2, body.high-contrast h3, body.high-contrast h4 { background-color: transparent !important; color: #000 !important; }
+body.high-contrast a { color: #0000ee !important; text-decoration: underline !important; }
+body.high-contrast .bg-dark, body.high-contrast .bg-primary, body.high-contrast .navbar, body.high-contrast footer, body.high-contrast .top_strip { background-color: #000 !important; color: #fff !important; border: 1px solid #fff !important; }
+body.high-contrast .bg-dark *, body.high-contrast .bg-primary *, body.high-contrast .navbar *, body.high-contrast footer *, body.high-contrast .top_strip * { color: #fff !important; }
+body.high-contrast .bg-dark a, body.high-contrast .bg-primary a, body.high-contrast .navbar a, body.high-contrast footer a, body.high-contrast .top_strip a { color: #00ffff !important; }
+
+/* Protection for the widget itself */
+body.high-contrast .accessibility-widget, body.high-contrast .accessibility-widget * { background: transparent !important; color: #fff !important; border: none !important; }
+body.high-contrast .accessibility-widget .accessibility-menu { background-color: #40c4ec !important; }
+body.high-contrast .accessibility-widget .accessibility-toggle { background-color: #007bff !important; }
+
+
+/* --- Color/Filter Effects --- */
 body.invert-colors > *:not(.accessibility-widget):not(#keyboard-info-toast-overlay) { filter: invert(1) hue-rotate(180deg) !important; }
 body.saturate-colors > *:not(.accessibility-widget):not(#keyboard-info-toast-overlay) { filter: saturate(3) !important; }
-body.invert-colors .accessibility-widget, body.saturate-colors .accessibility-widget { filter: none !important; z-index: 2147483647 !important; }
-/* This rule is intentionally broad to catch ALL images inside our widget when a global filter is active */
-body.invert-colors .accessibility-widget img, body.saturate-colors .accessibility-widget img { filter: none !important; }
+body.invert-colors .accessibility-widget, body.saturate-colors .accessibility-widget { filter: none !important; }
 
-/* Other accessibility effects */
-body.high-contrast { background: #000 !important; color: #fff !important; }
-body.high-contrast a { color: #00ffff !important; text-decoration: underline !important; }
-body.highlight-links a { background: yellow !important; color: #222 !important; text-decoration: underline !important; }
-body.text-spacing { letter-spacing: 0.15em !important; }
-body.line-height { line-height: 2.2 !important; }
-body.hide-images img { visibility: hidden !important; }
-body.hide-images .accessibility-widget .accessibility-toggle img { visibility: visible !important; }
+
+/* --- Text & Content Effects (THE FIX IS HERE) --- */
+
+/* Highlight Links: Target all links and buttons */
+body.highlight-links a,
+body.highlight-links button {
+    background-color: yellow !important;
+    color: #222 !important;
+    text-decoration: underline !important;
+}
+
+/* Text Spacing: Use the universal selector * to force application on ALL elements. */
+body.text-spacing * {
+    letter-spacing: 0.12em !important;
+}
+
+/* Line Height: Use the universal selector * to force application on ALL elements. */
+body.line-height * {
+    line-height: 1.8 !important;
+}
+
+/* Hide Images */
+body.hide-images img {
+    visibility: hidden !important;
+}
+/* Ensure the widget's own icons are still visible */
+body.hide-images .accessibility-widget img {
+    visibility: visible !important;
+}
+
 
 /* KEYBOARD INFO TOAST STYLES */
 #keyboard-info-toast-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999998; display: none; align-items: center; justify-content: center; }
@@ -97,10 +128,7 @@ body.hide-images .accessibility-widget .accessibility-toggle img { visibility: v
 #keyboard-info-toast h3 { margin-top: 0; color: #007bff; }
 #keyboard-info-toast ul { list-style: none; padding: 0; }
 #keyboard-info-toast li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-#keyboard-info-toast li:last-child { border-bottom: none; }
-#keyboard-info-toast code { background: #eee; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
 #keyboard-info-toast-close { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #888; }
-#keyboard-info-toast-close:hover { color: #333; }
 
 /* MOBILE RESPONSIVE STYLES */
 @media (max-width: 991.98px) {

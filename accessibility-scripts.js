@@ -1,19 +1,28 @@
 /**
  * Universal Accessibility Controls Module - JavaScript Core
- * v4.3 FINAL - Intelligent, Self-Contained Navigation Detection
+ * v4.1 FINAL - Smooth Scroll & Configurable Header Navigation
  */
 
 // Global state variables
 var dropdownInitialized = false; var dropdownJustOpened = false; var fontIncreaseLevel = 0, fontDecreaseLevel = 0, maxLevels = 3; var screenReaderActive = false; var speechSynthesis = window.speechSynthesis; var currentUtterance = null;
-var navLinks = [
-    'http://localhost:8000/about-pcacs.php',
-
-]; 
-var currentNavLinkIndex = -1;
+var navLinks = []; var currentNavLinkIndex = -1;
 
 // --- DEVELOPER CONFIGURATION ---
 var SKIP_ACCESSIBILITY_MENU = true;
 var SCREEN_READER_EXCLUSIONS = ['accessibility-widget', 'no-screen-reader'];
+
+// ===== NEW: CONFIGURABLE NAVIGATION SELECTORS =====
+// Add the CSS selectors for your main navigation containers here.
+// The script will find all `<a>` tags within these elements.
+// Example: ['header nav', '.main-menu', '#top-navigation']
+const NAVIGATION_SELECTORS = [
+    'header nav', // Standard HTML5 nav in a header
+    '.navbar',      // Common class for navigation bars
+    '#main-nav',     // Common ID for navigation
+    '#cssmenu',
+    '.menu-strip'
+];
+// ===============================================
 
 // ====== DROPDOWN MANAGEMENT ======
 function initializeAccessibilityDropdown() {
@@ -108,58 +117,9 @@ function reorganizeDropdownStructure() {
         <button class="ac-btn" onclick="resetAllSettings()" title="Reset All Settings" style="background:#dc3545;justify-content:center;font-weight:bold"><img src="https://img.icons8.com/ios-filled/16/recurring-appointment.png" alt="Reset">Reset All Settings</button>
     `;
 }
-
-// ===== NEW: INTELLIGENT NAVIGATION FINDER =====
-function findMainNavigationLinks() {
-    const allNavs = document.querySelectorAll('nav');
-
-    if (allNavs.length === 0) {
-        // Fallback if no <nav> tags exist: find links in the <header>
-        return document.querySelectorAll('header a[href]');
-    }
-
-    if (allNavs.length === 1) {
-        // If there's only one <nav>, it's almost certainly the main one.
-        return allNavs[0].querySelectorAll('a[href]');
-    }
-
-    // If multiple <nav> tags exist, use a scoring system to find the best one.
-    let candidates = Array.from(allNavs).map(nav => {
-        let score = 0;
-        const links = nav.querySelectorAll('a[href]');
-        
-        // Rule 1: Disqualify tiny or massive navs (like breadcrumbs or sitemaps)
-        if (links.length < 3 || links.length > 25) return { element: nav, score: -1 };
-
-        // Rule 2: Big bonus for being in the <header>
-        if (nav.closest('header')) score += 10;
-
-        // Rule 3: Bonus for NOT being in the <footer>
-        if (!nav.closest('footer')) score += 5;
-
-        // Rule 4: Bonus for having common navigation keywords in ID or class
-        const idAndClasses = (nav.id + ' ' + nav.className).toLowerCase();
-        if (/main|primary|top|header|menu/.test(idAndClasses)) score += 10;
-
-        return { element: nav, score: score };
-    });
-
-    // Sort candidates by score, highest first
-    const sortedCandidates = candidates.filter(c => c.score > 0).sort((a, b) => b.score - a.score);
-
-    if (sortedCandidates.length > 0) {
-        // Return links from the highest-scoring candidate
-        return sortedCandidates[0].element.querySelectorAll('a[href]');
-    }
-
-    // Final fallback if scoring fails
-    return document.querySelectorAll('header a[href]');
-}
-
-
 function setupKeyboardListeners() {
-    // This finds navigation links using the intelligent algorithm.
-    navLinks = findMainNavigationLinks();
+    // This finds navigation links based on the configured selectors.
+    navLinks = document.querySelectorAll(NAVIGATION_SELECTORS.join(', ') + ' a[href]');
 
     document.addEventListener('keydown', (event) => {
         const activeEl = document.activeElement;
@@ -179,8 +139,10 @@ function setupKeyboardListeners() {
         } else {
             switch (key) {
                 case 'm': window.scrollTo({ top: 0, behavior: 'smooth' }); break;
+                // ===== NEW: SMOOTH SCROLL FOR J/K KEYS =====
                 case 'j': window.scrollBy({ top: 100, left: 0, behavior: 'smooth' }); break;
                 case 'k': window.scrollBy({ top: -100, left: 0, behavior: 'smooth' }); break;
+                // ============================================
                 case 'h':
                     if (navLinks.length > 0) {
                         event.preventDefault();
