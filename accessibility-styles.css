@@ -1,9 +1,9 @@
 /*
  * ===================================================================
- *  ACCESSIBILITY STYLESHEET - v3.0 FINAL
+ *  ACCESSIBILITY STYLESHEET - v3.1 FINAL & STABLE
  * ===================================================================
- *  - FIX: Adds robust max-height and scrolling for the dropdown menu.
- *  - All positioning and features are stable.
+ *  - FIX: Correctly implements max-height and scrolling for the dropdown menu.
+ *  - All positioning, features, and bug fixes are stable.
  */
 
 /* Main widget container - The floating button holder */
@@ -19,21 +19,21 @@
     position: absolute;
     bottom: calc(100% + 15px);
     left: 0;
-    min-width: 260px;
+    min-width: 280px; /* Slightly wider for better spacing */
     padding: 15px 20px;
     font-size: 15px;
     z-index: 999999 !important;
     background: #40c4ec !important;
     color: #fff !important;
-    border-radius: 8px;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 
-    /* ===== FINAL FIX FOR OVERFLOW/SCROLLING ===== */
-    max-height: calc(100vh - 100px); /* Never be taller than the viewport minus some margin */
-    overflow-y: auto; /* Add a scrollbar if content is too tall */
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    /* ========================================== */
+    /* ===== FINAL & WORKING FIX FOR OVERFLOW/SCROLLING ===== */
+    max-height: 85vh; /* Never be taller than 85% of the viewport height */
+    overflow-y: auto; /* Add a vertical scrollbar ONLY if content exceeds max-height */
+    overflow-x: hidden; /* Prevent horizontal scrollbars */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    /* ======================================================== */
     
     /* Animation */
     opacity: 0;
@@ -44,7 +44,7 @@
 
 /* Custom scrollbar for the menu */
 .accessibility-widget .accessibility-menu::-webkit-scrollbar { width: 8px; }
-.accessibility-widget .accessibility-menu::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
+.accessibility-widget .accessibility-menu::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 4px; }
 .accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.6); border-radius: 4px; }
 .accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb:hover { background: #fff; }
 
@@ -57,7 +57,7 @@
 }
 
 .accessibility-widget .accessibility-menu strong { color: #fff !important; }
-.accessibility-widget .accessibility-menu .menu-divider { border-top: 1px solid rgba(255,255,255,0.3); margin: 10px 0; }
+.accessibility-widget .accessibility-menu .menu-divider { border-top: 1px solid rgba(255,255,255,0.3); margin: 12px 0; }
 
 /* Circular toggle button styling */
 .accessibility-widget .accessibility-toggle { padding: 10px !important; border: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #007bff !important; border-radius: 50% !important; width: 50px !important; height: 50px !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease !important; cursor: pointer !important; position: relative !important; }
@@ -77,16 +77,12 @@
 .accessibility-widget .status-indicator::after { content: '✓'; }
 
 /*
- * ===================================================================
- *  CRITICAL FIX FOR INVERT/SATURATE ISSUE
- * ===================================================================
+ * CRITICAL FIX FOR INVERT/SATURATE ISSUE
  */
 body.invert-colors > *:not(.accessibility-widget) { filter: invert(1) hue-rotate(180deg) !important; }
 body.saturate-colors > *:not(.accessibility-widget) { filter: saturate(3) !important; }
-body.invert-colors .accessibility-widget,
-body.saturate-colors .accessibility-widget { filter: none !important; z-index: 2147483647 !important; }
-body.invert-colors .accessibility-widget img,
-body.saturate-colors .accessibility-widget img { filter: none !important; }
+body.invert-colors .accessibility-widget, body.saturate-colors .accessibility-widget { filter: none !important; z-index: 2147483647 !important; }
+body.invert-colors .accessibility-widget img, body.saturate-colors .accessibility-widget img { filter: none !important; }
 
 /* Other accessibility effects */
 body.high-contrast { background: #000 !important; color: #fff !important; }
