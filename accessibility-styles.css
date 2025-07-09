@@ -1,385 +1,148 @@
-/* 
- * CUSTOMIZABLE SECTION - MODIFY THESE COLORS TO MATCH YOUR SITE
- * Change these colors to match your website's theme and design
+/*
+ * ===================================================================
+ *  ACCESSIBILITY STYLESHEET - FINAL VERSION v2.2.0
+ * ===================================================================
+ *  - FIX: Adds max-height and scrolling for the dropdown menu to prevent
+ *    it from going off-screen when page is zoomed.
+ *  - Positions widget on bottom-left of the WINDOW.
+ *  - Menu pops up above the button with animation.
+ *  - Fixes the invert/saturate color issue permanently.
+ *  - Fully responsive.
  */
-.accessibility-dropdown .dropdown-menu {
+
+/* Main widget container - The new floating button holder */
+.accessibility-widget {
+    position: fixed; /* Fixes the button to the window/viewport */
+    bottom: 20px;
+    left: 20px;
+    z-index: 999998; /* High z-index, but below the menu */
+}
+
+/* The accessibility dropdown menu itself */
+.accessibility-widget .accessibility-menu {
+    position: absolute; /* Positioned relative to the .accessibility-widget parent */
+    bottom: calc(100% + 15px); /* Pops up ABOVE the button with 15px spacing */
+    left: 0;
     min-width: 260px;
     padding: 15px 20px;
     font-size: 15px;
-    z-index: 9999;
-    /* CUSTOMIZE: Change dropdown background color to match your site */
-    background: #13c0e4 !important;
+    z-index: 999999 !important;
+    background: #40c4ec !important;
     color: #fff !important;
-    border-radius: 0 0 8px 8px;
+    border-radius: 8px;
     border: none;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-}
-.accessibility-dropdown .dropdown-menu strong {
-    /* CUSTOMIZE: Change dropdown text color */
-    color: #fff !important;
-}
-.accessibility-dropdown .dropdown-menu .divider {
-    /* CUSTOMIZE: Change divider color */
-    border-top: 1px solid #fff;
-    margin: 10px 0;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+    
+    /* ===== NEW FIX FOR OVERFLOW/SCROLLING ===== */
+    max-height: calc(100vh - 100px); /* Never be taller than the viewport minus some margin */
+    overflow-y: auto; /* Add a scrollbar if content is too tall */
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    /* ========================================== */
+    
+    /* FOR SMOOTH POP-UP ANIMATION */
+    opacity: 0;
+    transform: translateY(10px); /* Start slightly down */
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
 }
 
-/* 
- * BUTTON STYLING REMOVED - Let the host site control button appearance
- * The dropdown toggle button will inherit styles from your site's CSS
+/* Custom scrollbar styling for the menu */
+.accessibility-widget .accessibility-menu::-webkit-scrollbar {
+    width: 6px;
+}
+.accessibility-widget .accessibility-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+.accessibility-widget .accessibility-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+
+/* This class, toggled by JS, makes the menu appear */
+.accessibility-widget .accessibility-menu.show {
+    opacity: 1;
+    transform: translateY(0); /* Move to its final position */
+    visibility: visible;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.accessibility-widget .accessibility-menu strong { color: #fff !important; }
+.accessibility-widget .accessibility-menu .menu-divider { border-top: 1px solid #fff; margin: 10px 0; height: 1px; overflow: hidden; }
+
+/* The circular toggle button styling */
+.accessibility-widget .accessibility-toggle { padding: 10px !important; border: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #007bff !important; border-radius: 50% !important; width: 50px !important; height: 50px !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease !important; cursor: pointer !important; z-index: 999998 !important; position: relative !important; }
+.accessibility-widget .accessibility-toggle:hover { background: #0056b3 !important; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+.accessibility-widget .accessibility-toggle img { width: 24px !important; height: 24px !important; filter: brightness(0) invert(1) !important; object-fit: contain !important; }
+
+/* Menu item and button styling */
+.accessibility-widget .menu-item { margin: 0; padding: 0; list-style: none; }
+.accessibility-widget .ac-btn { display: flex; align-items: center; width: 100%; background: transparent; border: none; color: #fff; font-size: 15px; padding: 7px 0; margin: 0; text-align: left; transition: background 0.2s, color 0.2s; border-radius: 4px; position: relative; cursor: pointer; }
+.accessibility-widget .ac-btn img { margin-right: 10px; font-size: 16px; min-width: 18px; text-align: center; filter: invert(1); }
+.accessibility-widget .ac-btn:hover, .accessibility-widget .ac-btn:focus { background: #0ea7c7; color: #fff; outline: none; }
+.accessibility-widget .ac-btn.active { background: #0ea7c7; }
+
+/* Status indicators (checkmark, level number) */
+.accessibility-widget .level-indicator, .accessibility-widget .status-indicator { position: absolute; top: 50%; right: 5px; transform: translateY(-50%); background: #ffb300; color: #222; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: bold; display: none; align-items: center; justify-content: center; }
+.accessibility-widget .status-indicator { background: #28a745; color: #fff; width: 16px; height: 16px; }
+.accessibility-widget .ac-btn.active .level-indicator, .accessibility-widget .ac-btn.active .status-indicator { display: flex; }
+.accessibility-widget .status-indicator::after { content: '✓'; }
+
+/*
+ * ===================================================================
+ *  CRITICAL FIX FOR INVERT/SATURATE ISSUE (DO NOT CHANGE)
+ * ===================================================================
  */
-.accessibility-dropdown .dropdown-toggle {
-    /* Minimal required styles only - no visual styling */
-    padding: 5px !important;
-    border: none !important;
-    background: transparent !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-.accessibility-dropdown .dropdown-toggle:focus {
-    outline: 2px solid #005fcc;
-}
-.accessibility-dropdown .dropdown-toggle img {
-    /* Fluid icon sizing with padding */
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 24px !important;
-    max-height: 24px !important;
-    min-width: 16px !important;
-    min-height: 16px !important;
-    object-fit: contain !important;
-}
-.accessibility-dropdown .ac-btn {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 15px;
-    padding: 7px 0;
-    margin: 0;
-    text-align: left;
-    transition: background 0.2s, color 0.2s;
-    border-radius: 4px;
-    position: relative;
-}
-.accessibility-dropdown .ac-btn img {
-    margin-right: 10px;
-    font-size: 16px;
-    min-width: 18px;
-    text-align: center;
-}
-.accessibility-dropdown .ac-btn:hover, .accessibility-dropdown .ac-btn:focus {
-    /* CUSTOMIZE: Change button hover color to match your site */
-    background: #0ea7c7;
-    color: #fff;
-    outline: none;
-}
-.accessibility-dropdown .ac-btn.active {
-    /* CUSTOMIZE: Change active button color */
-    background: #0ea7c7;
-}
-.accessibility-dropdown .level-indicator {
-    position: absolute;
-    top: 2px;
-    right: 5px;
-    /* CUSTOMIZE: Change level indicator colors */
-    background: #ffb300;
-    color: #222;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
-    font-weight: bold;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-.accessibility-dropdown .ac-btn.active .level-indicator {
-    display: flex;
-}
-.accessibility-dropdown .status-indicator {
-    position: absolute;
-    top: 2px;
-    right: 5px;
-    /* CUSTOMIZE: Change status indicator color */
-    background: #28a745;
-    color: #fff;
-    border-radius: 50%;
-    width: 16px;
-    height: 16px;
-    font-size: 10px;
-    font-weight: bold;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-.accessibility-dropdown .ac-btn.active .status-indicator {
-    display: flex;
-}
-.accessibility-dropdown .status-indicator::after {
-    content: '✓';
-}
+body.invert-colors {}
+body.saturate-colors {}
+body.invert-colors > *:not(.accessibility-widget) { filter: invert(1) hue-rotate(180deg) !important; }
+body.saturate-colors > *:not(.accessibility-widget) { filter: saturate(3) !important; }
+body.invert-colors .accessibility-widget,
+body.saturate-colors .accessibility-widget { filter: none !important; z-index: 2147483647 !important; }
+body.invert-colors .accessibility-widget img,
+body.saturate-colors .accessibility-widget img { filter: none !important; }
 
-/* 
- * ACCESSIBILITY EFFECTS - UNIVERSAL STYLES
- * These styles are applied globally and should work on any website
- * Modify colors if needed to ensure proper contrast on your site
+/* Other accessibility effects */
+body.high-contrast { background: #000 !important; color: #fff !important; }
+body.high-contrast a { color: #00ffff !important; text-decoration: underline !important; }
+body.high-contrast button { background: #333 !important; color: #fff !important; border: 1px solid #fff !important; }
+body.highlight-links a { background: yellow !important; color: #222 !important; text-decoration: underline !important; }
+body.text-spacing { letter-spacing: 0.15em !important; }
+body.line-height { line-height: 2.2 !important; }
+body.hide-images img { visibility: hidden !important; }
+body.hide-images .accessibility-widget .accessibility-toggle img { visibility: visible !important; }
+
+/* Organized sections in the dropdown */
+.accessibility-widget .section-group { margin-bottom: 8px; }
+.accessibility-widget .section-group:last-child { margin-bottom: 0; }
+.accessibility-widget .section-group strong { display: flex !important; align-items: center !important; font-size: 14px !important; margin: 8px 0 6px 0 !important; padding: 4px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; color: #fff !important; }
+.accessibility-widget .section-group strong img { margin-right: 8px !important; flex-shrink: 0 !important; filter: invert(1); }
+.accessibility-widget .category-controls { display: flex !important; flex-direction: column !important; gap: 2px !important; }
+
+/*
+ * ===================================================================
+ *  MOBILE RESPONSIVE STYLES
+ * ===================================================================
  */
-body.high-contrast { 
-    /* CUSTOMIZE: Adjust high contrast colors for your site */
-    background: #000 !important; 
-    color: #fff !important; 
-}
-body.high-contrast a, body.high-contrast a:visited { 
-    /* CUSTOMIZE: Change high contrast link color */
-    color: #0ff !important; 
-    text-decoration: underline; 
-}
-body.invert-colors { 
-    filter: invert(1) hue-rotate(180deg) !important; 
-}
-body.saturate-colors { 
-    filter: saturate(3) !important; 
-}
-body.highlight-links a { 
-    /* CUSTOMIZE: Change link highlight colors */
-    background: yellow !important; 
-    color: #222 !important; 
-    text-decoration: underline !important; 
-}
-body.text-spacing { 
-    letter-spacing: 0.15em !important; 
-}
-body.line-height { 
-    line-height: 2.2 !important; 
-}
-body.hide-images img { 
-    visibility: hidden !important; 
-}
-
-/* Exception: Keep accessibility toggle button image visible */
-body.hide-images .accessibility-dropdown .dropdown-toggle img {
-    visibility: visible !important;
-}
-
-body { 
-    transition: font-size 0.2s, letter-spacing 0.2s, line-height 0.2s; 
-}
-
-/* Universal transitions for smooth font scaling */
-* {
-    transition: font-size 0.2s ease !important;
-}
-
-/* 
- * SECTION GROUPS - NEW ORGANIZATIONAL STRUCTURE
- * Better organization with proper spacing and visual hierarchy
- */
-.accessibility-dropdown .section-group {
-    margin-bottom: 8px;
-}
-
-.accessibility-dropdown .section-group:last-child {
-    margin-bottom: 0;
-}
-
-.accessibility-dropdown .section-group strong {
-    display: flex !important;
-    align-items: center !important;
-    font-size: 14px !important;
-    margin: 8px 0 6px 0 !important;
-    padding: 4px 0 !important;
-    border-bottom: 1px solid rgba(255,255,255,0.3) !important;
-    color: #fff !important;
-}
-
-.accessibility-dropdown .section-group strong img {
-    margin-right: 8px !important;
-    flex-shrink: 0 !important;
-}
-
-.accessibility-dropdown .category-controls {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 2px !important;
-}
-
-/* DEVELOPER OPTION: Two-column layout styles (activated via JavaScript) */
-.accessibility-dropdown .dropdown-menu.two-column {
-    min-width: 420px !important;
-    max-width: 450px !important;
-    padding: 16px 20px !important;
-    /* Better positioning to avoid overlay issues */
-    position: absolute !important;
-    z-index: 9998 !important; /* Slightly lower than mobile to prevent conflicts */
-}
-
-/* Two-column category controls layout */
-.accessibility-dropdown .dropdown-menu.two-column .category-controls {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 6px 8px !important;
-    margin-bottom: 12px !important;
-}
-
-/* Section headers in two-column remain full width */
-.accessibility-dropdown .dropdown-menu.two-column .section-group strong {
-    grid-column: 1 / -1 !important;
-    margin: 6px 0 4px 0 !important;
-}
-
-/* Dividers in two-column layout */
-.accessibility-dropdown .dropdown-menu.two-column .divider {
-    grid-column: 1 / -1 !important;
-    margin: 8px 0 !important;
-}
-
-/* Individual control buttons in two-column */
-.accessibility-dropdown .dropdown-menu.two-column .category-controls .ac-btn {
-    font-size: 13px !important;
-    padding: 8px 6px !important;
-    margin: 0 !important;
-    text-align: center !important;
-}
-
-/* Speech controls and reset button always full width in two-column */
-.accessibility-dropdown .dropdown-menu.two-column #speechControls,
-.accessibility-dropdown .dropdown-menu.two-column .reset-btn {
-    grid-column: 1 / -1 !important;
-    width: 100% !important;
-}
-
-/* Single full-width buttons in two-column */
-.accessibility-dropdown .dropdown-menu.two-column .full-width {
-    grid-column: 1 / -1 !important;
-}
-
-/* Improve speech controls in two-column layout */
-.accessibility-dropdown .dropdown-menu.two-column #speechControls {
-    background: rgba(255,255,255,0.1) !important;
-    border-radius: 6px !important;
-    padding: 12px !important;
-    margin-top: 8px !important;
-}
-
-
-/* 
- * MOBILE RESPONSIVE STYLES - VIEWPORT BOUNDARY PROTECTION
- * Ensure dropdown never goes outside screen boundaries
- */
-
-/* Base responsive adjustments for all screen sizes */
-.accessibility-dropdown .dropdown-menu {
-    /* Prevent horizontal overflow */
-    max-width: calc(100vw - 20px) !important;
-    /* Prevent vertical overflow */
-    max-height: calc(100vh - 100px) !important;
-    overflow-y: auto !important;
-    /* Smart positioning - stay within viewport */  
-    position: absolute !important;
-    box-sizing: border-box !important;
-}
-
-/* Dynamic positioning to prevent off-screen issues */
-.accessibility-dropdown.dropdown {
-    position: relative !important;
-}
-
-/* Tablet and mobile adjustments */
 @media (max-width: 768px) {
-    .accessibility-dropdown .dropdown-menu {
-        /*
-         * VIEWPORT POSITIONING & LAYERING - IMPROVED
-         */
-        position: fixed !important;
-        z-index: 99999 !important; /* High z-index for mobile overlay */
-        top: 60px !important;      /* Better spacing from top */
-        right: 15px !important;    /* More space from edge */
-        left: auto !important;
-        transform: none !important;
-
-        /*
-         * SIZE CONSTRAINTS - OPTIMIZED FOR MOBILE
-         */
-        width: auto !important;
-        min-width: 300px !important;
-        max-width: calc(100vw - 30px) !important;
-        
-        /*
-         * CRITICAL SCROLLING FIX - ENHANCED
-         * This section solves the "can't scroll" issue on mobile.
-         */
-        max-height: calc(100vh - 80px) !important; /* Better height calculation */
-        overflow-y: auto !important;               /* Add a scrollbar if content overflows */
-        -webkit-overflow-scrolling: touch !important; /* Enables smooth, momentum-based scrolling on iOS */
-        touch-action: pan-y !important;            /* Tells the browser this element handles vertical swipes */
-
-        /* General styling for mobile - IMPROVED */
-        padding: 20px 24px !important;
-        font-size: 16px !important; /* Better readability on mobile */
-        border-radius: 12px !important;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
-        
-        /* Add backdrop blur for modern mobile feel */
-        backdrop-filter: blur(8px) !important;
-        background: rgba(19, 192, 228, 0.95) !important; /* Slightly transparent */
+    .accessibility-widget {
+        bottom: 15px;
+        left: 15px;
     }
-    
-    /* Force single column layout on mobile with better organization */
-    .accessibility-dropdown .dropdown-menu.two-column {
-        display: block !important;
-        width: 100% !important;
-        min-width: 300px !important;
+    .accessibility-widget .accessibility-menu {
+        position: absolute;
+        bottom: calc(100% + 10px);
+        left: 0;
+        width: calc(100vw - 30px);
+        max-width: 320px;
+        transform-origin: bottom left;
+        top: auto !important;
+        right: auto !important;
     }
-    
-    .accessibility-dropdown .dropdown-menu.two-column .category-controls {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 4px !important;
-    }
-
-    /* Enhanced mobile button styling */
-    .accessibility-dropdown .ac-btn {
-        font-size: 16px !important;
-        padding: 14px 8px !important; /* Better touch targets */
-        margin: 2px 0 !important;
-        border-radius: 8px !important;
-        min-height: 48px !important; /* Minimum touch target size */
-        display: flex !important;
-        align-items: center !important;
-    }
-    
-    .accessibility-dropdown .ac-btn img {
-        margin-right: 12px !important;
-        min-width: 20px !important;
-        min-height: 20px !important;
-    }
-    
-    /* Better section spacing on mobile */
-    .accessibility-dropdown .section-group {
-        margin-bottom: 16px !important;
-    }
-    
-    .accessibility-dropdown .section-group strong {
-        font-size: 15px !important;
-        margin: 12px 0 8px 0 !important;
-        padding: 6px 0 !important;
-    }
-    
-    /* Enhanced speech controls for mobile */
-    #speechControls {
-        padding: 16px !important;
-        margin: 12px 0 !important;
-        background: rgba(255,255,255,0.15) !important;
-        border-radius: 8px !important;
-    }
-    
-    #speechControls input[type="range"] {
-        width: 100% !important;
-        height: 32px !important; /* Better touch target for sliders */
-        margin: 8px 0 !important;
-    }
+    .accessibility-widget .ac-btn { font-size: 16px !important; padding: 14px 8px !important; min-height: 48px !important; }
 }
