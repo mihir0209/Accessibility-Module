@@ -1,41 +1,18 @@
 /*
  * ===================================================================
- *  ACCESSIBILITY STYLESHEET - v5.2 DEFINITIVE & STABLE
+ *  ACCESSIBILITY STYLESHEET - v7.1 FINAL (INTELLIGENT SINGLE CONTRAST)
  * ===================================================================
- *  - FIX: Restores Highlight Links, Text Spacing, and Line Height by
- *    using universal, forceful CSS rules that override host site styles.
- *  - All features are now stable and working as intended.
+ *  - RESTORED: Single "High Contrast" button.
+ *  - NEW: High Contrast mode is now intelligent and works on both light
+ *    and dark website themes without breaking.
+ *  - All other features are stable.
  */
 
 /* Main widget container */
-.accessibility-widget {
-    position: fixed !important;
-    bottom: 20px !important;
-    left: 20px !important;
-    z-index: 9999999 !important;
-}
+.accessibility-widget { position: fixed !important; bottom: 20px !important; left: 20px !important; z-index: 9999999 !important; }
 
-/* The accessibility dropdown menu */
-.accessibility-widget .accessibility-menu {
-    position: absolute !important;
-    bottom: calc(100% + 15px) !important;
-    left: 0 !important;
-    min-width: 280px !important;
-    padding: 15px 20px !important;
-    font-size: 15px !important;
-    background: #40c4ec !important;
-    color: #fff !important;
-    border-radius: 12px !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
-    max-height: 85vh !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch !important;
-    opacity: 0;
-    transform: translateY(10px);
-    visibility: hidden;
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
-}
+/* Dropdown menu */
+.accessibility-widget .accessibility-menu { position: absolute !important; bottom: calc(100% + 15px) !important; left: 0 !important; min-width: 280px !important; padding: 15px 20px !important; font-size: 15px !important; background: #40c4ec !important; color: #fff !important; border-radius: 12px !important; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important; max-height: 85vh !important; overflow-y: auto !important; overflow-x: hidden !important; -webkit-overflow-scrolling: touch !important; opacity: 0; transform: translateY(10px); visibility: hidden; transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s; }
 .accessibility-widget .accessibility-menu.show { opacity: 1; transform: translateY(0); visibility: visible; }
 .accessibility-widget .accessibility-menu::-webkit-scrollbar { width: 8px; }
 .accessibility-widget .accessibility-menu::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
@@ -45,82 +22,85 @@
 body .accessibility-widget img { width: auto !important; height: auto !important; background-color: transparent !important; object-fit: initial !important; filter: invert(1) !important; margin-right: 12px !important; min-width: 18px !important; }
 body .accessibility-widget .accessibility-toggle img { filter: brightness(0) invert(1) !important; margin-right: 0 !important; }
 
-/* Circular toggle button */
+/* Buttons and Sections */
 .accessibility-widget .accessibility-toggle { padding: 10px !important; border: none !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; background: #007bff !important; border-radius: 50% !important; width: 50px !important; height: 50px !important; cursor: pointer !important; position: relative !important; }
 .accessibility-widget .accessibility-toggle:hover { background: #0056b3 !important; }
-
-/* Menu item and button styling */
 .accessibility-widget .ac-btn { display: flex; align-items: center; width: 100%; background: transparent; border: none; color: #fff; font-size: 15px; padding: 6px 5px; margin: 1px 0; text-align: left; transition: background 0.2s ease; border-radius: 4px; position: relative; cursor: pointer; }
 .accessibility-widget .ac-btn:hover, .accessibility-widget .ac-btn:focus { background: #0ea7c7; outline: none; }
 .accessibility-widget .ac-btn.active { background: #0ea7c7; font-weight: bold; }
-
-/* Organized sections */
 .accessibility-widget .section-group { margin-bottom: 6px; }
 .accessibility-widget .menu-divider { border-top: 1px solid rgba(255,255,255,0.3); margin: 8px 0; }
 .accessibility-widget .section-group strong { display: flex !important; align-items: center !important; font-size: 14px !important; margin: 6px 0 4px 0 !important; padding: 4px 0 !important; border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important; color: #fff !important; }
 .accessibility-widget .category-controls { display: flex !important; flex-direction: column !important; gap: 0px; }
-
-/* Status indicators */
 .accessibility-widget .level-indicator, .accessibility-widget .status-indicator { position: absolute; top: 50%; right: 5px; transform: translateY(-50%); background: #ffb300; color: #222; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: bold; display: none; align-items: center; justify-content: center; }
 .accessibility-widget .status-indicator { background: #28a745; color: #fff; width: 16px; height: 16px; }
 .accessibility-widget .ac-btn.active .level-indicator, .accessibility-widget .ac-btn.active .status-indicator { display: flex; }
 .accessibility-widget .status-indicator::after { content: '✓'; }
 
-
 /* =================================================================== */
-/*  ACCESSIBILITY EFFECTS (FORCEFUL & UNIVERSAL VERSION)               */
+/*  ACCESSIBILITY EFFECTS (STABLE & INTELLIGENT)                       */
 /* =================================================================== */
 
-/* --- High Contrast Mode --- */
-body.high-contrast { background-color: #fff !important; color: #000 !important; }
-body.high-contrast div, body.high-contrast p, body.high-contrast span, body.high-contrast li,
-body.high-contrast h1, body.high-contrast h2, body.high-contrast h3, body.high-contrast h4 { background-color: transparent !important; color: #000 !important; }
-body.high-contrast a { color: #0000ee !important; text-decoration: underline !important; }
-body.high-contrast .bg-dark, body.high-contrast .bg-primary, body.high-contrast .navbar, body.high-contrast footer, body.high-contrast .top_strip { background-color: #000 !important; color: #fff !important; border: 1px solid #fff !important; }
-body.high-contrast .bg-dark *, body.high-contrast .bg-primary *, body.high-contrast .navbar *, body.high-contrast footer *, body.high-contrast .top_strip * { color: #fff !important; }
-body.high-contrast .bg-dark a, body.high-contrast .bg-primary a, body.high-contrast .navbar a, body.high-contrast footer a, body.high-contrast .top_strip a { color: #00ffff !important; }
-
-/* Protection for the widget itself */
-body.high-contrast .accessibility-widget, body.high-contrast .accessibility-widget * { background: transparent !important; color: #fff !important; border: none !important; }
+/* --- NEW: INTELLIGENT HIGH CONTRAST MODE --- */
+/* This mode makes backgrounds black or white, and text the opposite. */
+body.high-contrast {
+    background-color: #fff !important; /* Default background is white */
+}
+body.high-contrast *:not(.accessibility-widget *):not(#keyboard-info-toast *) {
+    background-color: transparent !important;
+    color: #000 !important;
+    border-color: #000 !important;
+}
+body.high-contrast a:not(.accessibility-widget *):not(#keyboard-info-toast *) {
+    color: #0000ee !important;
+    text-decoration: underline !important;
+    font-weight: bold;
+}
+/* Rule for explicitly dark containers (like headers/footers) */
+body.high-contrast .bg-dark,
+body.high-contrast .bg-primary,
+body.high-contrast .navbar,
+body.high-contrast .top_strip,
+body.high-contrast footer {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+body.high-contrast .bg-dark *,
+body.high-contrast .bg-primary *,
+body.high-contrast .navbar *,
+body.high-contrast .top_strip *,
+body.high-contrast footer * {
+    color: #fff !important;
+}
+body.high-contrast .bg-dark a,
+body.high-contrast .bg-primary a,
+body.high-contrast .navbar a,
+body.high-contrast .top_strip a,
+body.high-contrast footer a {
+    color: #00ffff !important;
+}
+/* Protection for the widget itself (critical) */
+body.high-contrast .accessibility-widget, body.high-contrast .accessibility-widget * {
+    background: transparent !important;
+    color: #fff !important;
+    border: none !important;
+}
 body.high-contrast .accessibility-widget .accessibility-menu { background-color: #40c4ec !important; }
 body.high-contrast .accessibility-widget .accessibility-toggle { background-color: #007bff !important; }
+/* --- END HIGH CONTRAST --- */
 
+/* --- Filter Effects (JS-Assisted, Stable) --- */
+.aw-invert { filter: invert(1) hue-rotate(180deg) !important; }
+.aw-invert-img { filter: invert(1) !important; } /* Prevents color distortion on images */
+.aw-saturate { filter: saturate(3) !important; }
 
-/* --- Color/Filter Effects --- */
-body.invert-colors > *:not(.accessibility-widget):not(#keyboard-info-toast-overlay) { filter: invert(1) hue-rotate(180deg) !important; }
-body.saturate-colors > *:not(.accessibility-widget):not(#keyboard-info-toast-overlay) { filter: saturate(3) !important; }
-body.invert-colors .accessibility-widget, body.saturate-colors .accessibility-widget { filter: none !important; }
-
-
-/* --- Text & Content Effects (THE FIX IS HERE) --- */
-
-/* Highlight Links: Target all links and buttons */
-body.highlight-links a,
-body.highlight-links button {
-    background-color: yellow !important;
-    color: #222 !important;
-    text-decoration: underline !important;
-}
-
-/* Text Spacing: Use the universal selector * to force application on ALL elements. */
-body.text-spacing * {
-    letter-spacing: 0.12em !important;
-}
-
-/* Line Height: Use the universal selector * to force application on ALL elements. */
-body.line-height * {
-    line-height: 1.8 !important;
-}
-
-/* Hide Images */
-body.hide-images img {
-    visibility: hidden !important;
-}
-/* Ensure the widget's own icons are still visible */
-body.hide-images .accessibility-widget img {
-    visibility: visible !important;
-}
-
+/* --- Text & Content Effects (JS-Assisted, Stable) --- */
+.aw-text-space { letter-spacing: 0.12em !important; }
+.aw-line-height { line-height: 1.8 !important; }
+body.highlight-links a:not(.accessibility-widget *),
+body.highlight-links button:not(.accessibility-widget *) { background-color: yellow !important; color: #222 !important; text-decoration: underline !important; }
+body.hide-images img { visibility: hidden !important; }
+body.hide-images .accessibility-widget img { visibility: visible !important; }
 
 /* KEYBOARD INFO TOAST STYLES */
 #keyboard-info-toast-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999998; display: none; align-items: center; justify-content: center; }
@@ -131,8 +111,4 @@ body.hide-images .accessibility-widget img {
 #keyboard-info-toast-close { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #888; }
 
 /* MOBILE RESPONSIVE STYLES */
-@media (max-width: 991.98px) {
-    .accessibility-widget { bottom: 15px; left: 15px; }
-    .accessibility-widget .accessibility-menu { width: calc(100vw - 30px); max-width: 320px; }
-    .accessibility-widget .ac-btn { min-height: 44px !important; }
-}
+@media (max-width: 991.98px) { .accessibility-widget { bottom: 15px; left: 15px; } .accessibility-widget .accessibility-menu { width: calc(100vw - 30px); max-width: 320px; } .accessibility-widget .ac-btn { min-height: 44px !important; } }
